@@ -68,7 +68,6 @@ public class RedBlackTree<E extends Comparable<E>> {
         Node<E> current = root;
         Node<E> parent = null;
 
-        // Find the position to insert
         while (current != NIL) {
             parent = current;
             int cmp = element.compareTo(current.element);
@@ -83,7 +82,6 @@ public class RedBlackTree<E extends Comparable<E>> {
             }
         }
 
-        // Set the parent and insert the new node
         newNode.parent = parent;
 
         if (element.compareTo(parent.element) < 0) {
@@ -92,13 +90,56 @@ public class RedBlackTree<E extends Comparable<E>> {
             parent.right = newNode;
         }
 
-        // Fix the Red-Black Tree properties
         fixInsert(newNode);
     }
 
+
     private void fixInsert(Node<E> node) {
-        // todo: implement the fixInsert method!
-        // follow the instructions in readme.md
+        while (node != root && node.parent.color == Color.RED) {
+            Node<E> parent = node.parent;
+            Node<E> grandparent = parent.parent;
+            if (parent == grandparent.left) {
+                Node<E> uncle = grandparent.right;
+                if (uncle.color == Color.RED) {
+                    parent.color = Color.BLACK;
+                    uncle.color = Color.BLACK;
+                    grandparent.color = Color.RED;
+                    node = grandparent;
+                } else {
+                    if (node == parent.right) {
+                        node = parent;
+                        leftRotate(node);
+                        parent = node.parent;
+                        grandparent = parent.parent;
+                    }
+                    parent.color = Color.BLACK;
+                    grandparent.color = Color.RED;
+                    rightRotate(grandparent);
+                }
+            }
+            else {
+                Node<E> uncle = grandparent.left;
+                if (uncle.color == Color.RED) {
+                    parent.color = Color.BLACK;
+                    uncle.color = Color.BLACK;
+                    grandparent.color = Color.RED;
+                    node = grandparent;
+                } else {
+                    if (node == parent.left) {
+                        node = parent;
+                        rightRotate(node);
+                        parent = node.parent;
+                        grandparent = parent.parent;
+                    }
+
+                    parent.color = Color.BLACK;
+                    grandparent.color = Color.RED;
+                    leftRotate(grandparent);
+                }
+            }
+        }
+
+        root.color = Color.BLACK;
     }
 
     private void leftRotate(Node<E> x) {
