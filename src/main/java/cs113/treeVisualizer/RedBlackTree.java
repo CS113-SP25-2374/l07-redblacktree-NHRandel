@@ -140,7 +140,7 @@ public class RedBlackTree<E extends Comparable<E>> {
         }
 
         root.color = Color.BLACK;
-    }
+    } //
 
     private void leftRotate(Node<E> x) {
         Node<E> y = x.right;
